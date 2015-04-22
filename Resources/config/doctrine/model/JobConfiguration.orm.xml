@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ This file is part of the Tadcka package.
+
+ (c) Tadas Gliaubicas <tadcka89@gmail.com>
+
+ For the full copyright and license information, please view the LICENSE
+ file that was distributed with this source code.
+-->
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Aureja\JobQueue\Model\Report\JobConfiguration">
+
+        <field name="createdAt" column="created_at" type="datetime" nullable="false" />
+
+        <field name="factory" column="factory" type="string" length="255" nullable="false" />
+
+        <field name="nextStart" column="next_start" type="datetime" nullable="true" />
+
+        <field name="parameters" column="parameters" type="array" nullable="true" />
+
+        <field name="period" column="period" type="integer" nullable="false" />
+
+        <field name="priority" column="priority" type="integer" nullable="false" />
+
+        <field name="queue" column="queue" type="string" length="255" nullable="false" />
+
+        <field name="state" column="state" type="string" length="255" nullable="false" />
+
+    </mapped-superclass>
+
+</doctrine-mapping>

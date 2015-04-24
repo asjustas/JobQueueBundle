@@ -24,6 +24,25 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('aureja_job_queue');
 
+        $rootNode
+            ->children()
+                ->scalarNode('db_driver')->cannotBeOverwritten()->isRequired()->end()
+                ->scalarNode('job_configuration_manager')
+                    ->defaultValue('aureja_job_queue.manager.job_configuration.default')->cannotBeEmpty()->end()
+                ->scalarNode('job_report_manager')
+                    ->defaultValue('aureja_job_queue.manager.job_report.default')->cannotBeEmpty()->end()
+                ->arrayNode('class')->isRequired()
+                    ->children()
+                        ->arrayNode('model')->isRequired()
+                            ->children()
+                                ->scalarNode('job_configuration')->isRequired()->end()
+                                ->scalarNode('job_report')->isRequired()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }

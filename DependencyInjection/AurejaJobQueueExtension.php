@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\Loader;
 
 class AurejaJobQueueExtension extends Extension
 {
+
     /**
      * {@inheritdoc}
      */
@@ -26,7 +27,21 @@ class AurejaJobQueueExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+
+        if (!in_array(strtolower($config['db_driver']), ['mongodb', 'orm'])) {
+            throw new \InvalidArgumentException(sprintf('Invalid db driver "%s".', $config['db_driver']));
+        }
+        $loader->load('db_driver/' . sprintf('%s.xml', $config['db_driver']));
+
+        $container->setParameter(
+            'aureja_job_queue.model.job_configuration.class',
+            $config['class']['model']['job_configuration']
+        );
+        $container->setParameter('aureja_job_queue.model.job_report.class', $config['class']['model']['job_report']);
+
+        $container->setAlias('aureja_job_queue.manager.job_configuration', $config['job_configuration_manager']);
+        $container->setAlias('aureja_job_queue.manager.job_report', $config['job_report_manager']);
     }
 }

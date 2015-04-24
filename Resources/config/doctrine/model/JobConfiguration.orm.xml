@@ -14,7 +14,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <mapped-superclass name="Aureja\JobQueue\Model\Report\JobConfiguration">
+    <mapped-superclass name="Aureja\JobQueue\Model\JobConfiguration">
 
         <field name="createdAt" column="created_at" type="datetime" nullable="false" />
 

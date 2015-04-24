@@ -14,7 +14,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <mapped-superclass name="Aureja\JobQueue\Model\Report">
+    <mapped-superclass name="Aureja\JobQueue\Model\JobReport">
 
         <field name="endedAt" column="ended_at" type="datetime" nullable="false" />
 

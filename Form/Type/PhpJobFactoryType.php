@@ -14,13 +14,14 @@ namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Tadas Gliaubicas <tadcka89@gmail.com>
  *
- * @since 4/22/15 10:34 PM
+ * @since 4/22/15 10:38 PM
  */
-class SymfonyServiceJobType extends AbstractType
+class PhpJobFactoryType extends AbstractType
 {
 
     /**
@@ -28,9 +29,14 @@ class SymfonyServiceJobType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('symfony_service_id', 'text', ['label' => 'symfony.service.id']);
-
-        $builder->add('symfony_service_method', 'text', ['label' => 'symfony.service.method']);
+        $builder->add(
+            'php_script',
+            'textarea',
+            [
+                'label' => 'Php script',
+                'constraints' => new Assert\NotBlank(),
+            ]
+        );
     }
 
     /**
@@ -38,7 +44,11 @@ class SymfonyServiceJobType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['translation_domain' => 'AurejaJobQueue']);
+        $resolver->setDefaults(
+            [
+                'label' => false,
+            ]
+        );
     }
 
     /**
@@ -46,6 +56,6 @@ class SymfonyServiceJobType extends AbstractType
      */
     public function getName()
     {
-        return 'aureja_symfony_service_job';
+        return 'aureja_php_job_factory';
     }
 }

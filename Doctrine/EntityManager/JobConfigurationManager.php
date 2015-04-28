@@ -63,6 +63,14 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     /**
      * {@inheritdoc}
      */
+    public function findAll()
+    {
+        return $this->repository->findAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(JobConfigurationInterface $configuration, $save = false)
     {
         $this->em->persist($configuration);

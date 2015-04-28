@@ -18,13 +18,17 @@
 
         <field name="createdAt" column="created_at" type="datetime" nullable="false" />
 
+        <field name="disabled" column="disabled" type="boolean" nullable="false" />
+
         <field name="factory" column="factory" type="string" length="255" nullable="false" />
+
+        <field name="name" column="name" type="string" length="255" nullable="false" unique="true" />
 
         <field name="nextStart" column="next_start" type="datetime" nullable="true" />
 
         <field name="parameters" column="parameters" type="array" nullable="true" />
 
-        <field name="period" column="period" type="integer" nullable="false" />
+        <field name="period" column="period" type="integer" nullable="true" />
 
         <field name="priority" column="priority" type="integer" nullable="false" />
 

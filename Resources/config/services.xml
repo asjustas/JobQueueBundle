@@ -17,7 +17,18 @@
 
     <services>
 
+        <service id="aureja_job_queue.builder.symfony_command" class="Aureja\JobQueue\Extension\Symfony\Command\CommandBuilder">
+            <argument>%kernel.root_dir%</argument>
+            <argument>%kernel.environment%</argument>
+        </service>
+
+        <service id="aureja_job_queue.provider.job" class="Aureja\JobQueue\Provider\JobProvider">
+            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
+            <argument type="service" id="aureja_job_queue.registry.job_factory" />
+        </service>
+
         <service id="aureja_job_queue.registry.job_factory" class="Aureja\JobQueue\Register\JobFactoryRegistry" />
+
 
     </services>
 

@@ -14,13 +14,14 @@ namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Tadas Gliaubicas <tadcka89@gmail.com>
  *
- * @since 4/22/15 10:37 PM
+ * @since 4/22/15 10:34 PM
  */
-class ShellJobType extends AbstractType
+class SymfonyServiceJobFactoryType extends AbstractType
 {
 
     /**
@@ -28,7 +29,23 @@ class ShellJobType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('shell_command', 'text', ['label' => 'shell_command']);
+        $builder->add(
+            'symfony_service_id',
+            'text',
+            [
+                'label' => 'Symfony service id',
+                'constraints' => new Assert\NotBlank(),
+            ]
+        );
+
+        $builder->add(
+            'symfony_service_method',
+            'text',
+            [
+                'label' => 'Symfony service method',
+                'constraints' => new Assert\NotBlank(),
+            ]
+        );
     }
 
     /**
@@ -36,7 +53,11 @@ class ShellJobType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['translation_domain' => 'AurejaJobQueue']);
+        $resolver->setDefaults(
+            [
+                'label' => false,
+            ]
+        );
     }
 
     /**
@@ -44,6 +65,6 @@ class ShellJobType extends AbstractType
      */
     public function getName()
     {
-        return 'aureja_shell_job';
+        return 'aureja_symfony_service_job_factory';
     }
 }

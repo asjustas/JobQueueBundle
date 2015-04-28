@@ -11,6 +11,7 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 
+use Aureja\JobQueue\Provider\JobProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -19,9 +20,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @author Tadas Gliaubicas <tadcka89@gmail.com>
  *
- * @since 4/28/15 10:54 PM
+ * @since 4/22/15 10:38 PM
  */
-class JobConfigurationType extends AbstractType
+class JobPreConfigurationType extends AbstractType
 {
 
     /**
@@ -29,6 +30,10 @@ class JobConfigurationType extends AbstractType
      */
     private $configurationClass;
 
+    /**
+     * @var JobProviderInterface
+     */
+    private $jobProvider;
 
     /**
      * @var array
@@ -39,11 +44,13 @@ class JobConfigurationType extends AbstractType
      * Constructor.
      *
      * @param string $configurationClass
+     * @param JobProviderInterface $jobProvider
      * @param array $queues
      */
-    public function __construct($configurationClass, array $queues)
+    public function __construct($configurationClass, JobProviderInterface $jobProvider, array $queues)
     {
         $this->configurationClass = $configurationClass;
+        $this->jobProvider = $jobProvider;
         $this->queues = $queues;
     }
 
@@ -62,20 +69,16 @@ class JobConfigurationType extends AbstractType
             ]
         );
 
-        $builder->add(
-            'disabled',
-            'checkbox',
-            [
-                'label' => 'disabled',
-                'required' => false,
-            ]
-        );
+
+        $factoryNames = $this->jobProvider->getFactoryNames();
 
         $builder->add(
-            'period',
-            'integer',
+            'factory',
+            'choice',
             [
-                'label' => 'period',
+                'label' => 'job_type',
+                'choices' => array_combine($factoryNames, $factoryNames),
+                'empty_value' => 'select',
                 'constraints' => new Assert\NotBlank(),
             ]
         );
@@ -91,8 +94,6 @@ class JobConfigurationType extends AbstractType
             ]
         );
 
-        $builder->add('parameters', $options['job_factory']);
-
         $builder->add(
             'submit',
             'submit',
@@ -107,8 +108,6 @@ class JobConfigurationType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setOptional(['job_factory']);
-
         $resolver->setDefaults(
             [
                 'data_class' => $this->configurationClass,
@@ -122,6 +121,6 @@ class JobConfigurationType extends AbstractType
      */
     public function getName()
     {
-        return 'aureja_job_configuration';
+        return 'aureja_job_pre_configuration';
     }
 }

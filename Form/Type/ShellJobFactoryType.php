@@ -14,13 +14,14 @@ namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Tadas Gliaubicas <tadcka89@gmail.com>
  *
- * @since 4/22/15 10:33 PM
+ * @since 4/22/15 10:37 PM
  */
-class SymfonyCommandJobType extends AbstractType
+class ShellJobFactoryType extends AbstractType
 {
 
     /**
@@ -28,7 +29,14 @@ class SymfonyCommandJobType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('symfony_command', 'text', ['label' => 'symfony.command']);
+        $builder->add(
+            'shell_command',
+            'text',
+            [
+                'label' => 'Shell command',
+                'constraints' => new Assert\NotBlank(),
+            ]
+        );
     }
 
     /**
@@ -36,7 +44,11 @@ class SymfonyCommandJobType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['translation_domain' => 'AurejaJobQueue']);
+        $resolver->setDefaults(
+            [
+                'label' => false,
+            ]
+        );
     }
 
     /**
@@ -44,6 +56,6 @@ class SymfonyCommandJobType extends AbstractType
      */
     public function getName()
     {
-        return 'aureja_symfony_command_job';
+        return 'aureja_shell_job_factory';
     }
 }

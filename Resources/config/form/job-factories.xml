@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<!--
+/*
+ * This file is part of the Tadcka package.
+ *
+ * (c) Tadas Gliaubicas <tadcka89@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!--Php job factory form type-->
+        <service id="aureja_job_queue.form_type.php_job_factory" class="Aureja\Bundle\JobQueueBundle\Form\Type\PhpJobFactoryType">
+            <tag name="form.type" alias="aureja_php_job_factory" />
+        </service>
+
+        <!--Shell job factory form type-->
+        <service id="aureja_job_queue.form_type.shell_job_factory" class="Aureja\Bundle\JobQueueBundle\Form\Type\ShellJobFactoryType">
+            <tag name="form.type" alias="aureja_shell_job_factory" />
+        </service>
+
+        <!--Symfony command job factory form type-->
+        <service id="aureja_job_queue.form_type.symfony_command_job_factory" class="Aureja\Bundle\JobQueueBundle\Form\Type\SymfonyCommandJobFactoryType">
+            <tag name="form.type" alias="aureja_symfony_command_job_factory" />
+        </service>
+
+        <!--Symfony service job factory form type-->
+        <service id="aureja_job_queue.form_type.symfony_service_job_factory" class="Aureja\Bundle\JobQueueBundle\Form\Type\SymfonyServiceJobFactoryType">
+            <tag name="form.type" alias="aureja_symfony_service_job_factory" />
+        </service>
+
+    </services>
+
+</container>

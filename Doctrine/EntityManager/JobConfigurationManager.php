@@ -11,8 +11,10 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Doctrine\EntityManager;
 
+use Aureja\JobQueue\JobState;
 use Aureja\JobQueue\Model\JobConfigurationInterface;
 use Aureja\JobQueue\Model\Manager\JobConfigurationManager as BaseJobConfigurationManager;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -66,6 +68,36 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     public function findAll()
     {
         return $this->repository->findAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findNext($queue)
+    {
+        $qb = $this->repository->createQueryBuilder('jc');
+
+        $qb->andWhere($qb->expr()->notIn('jc.state', ':states'))
+            ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED]);
+        $qb->andWhere($qb->expr()->eq('jc.disabled', 0));
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('jc.nextStart'),
+                $qb->expr()->lte('jc.nextStart', ':now')
+            )
+        )->setParameter('now', new \DateTime(), Type::DATETIME);
+
+        if (null !== $queue) {
+            $qb->andWhere($qb->expr()->eq('jc.queue', ':queue'))
+                ->setParameter('queue', $queue);
+        }
+
+        $qb->orderBy('jc.nextStart');
+        $qb->setMaxResults(1);
+
+        $qb->select('jc');
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**

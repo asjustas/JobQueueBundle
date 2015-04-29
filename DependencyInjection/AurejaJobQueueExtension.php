@@ -28,6 +28,7 @@ class AurejaJobQueueExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('commands.xml');
         $loader->load('form/job-configuration.xml');
         $loader->load('form/job-factories.xml');
         $loader->load('form/job-pre-configuration.xml');

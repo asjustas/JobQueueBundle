@@ -3,7 +3,7 @@ aureja_shell_job_factory: Shell
 aureja_symfony_command_job_factory: Symfony command
 aureja_symfony_service_job_factory: Symfony service
 
-disabled: Nematomas
+disabled: Paslėptas
 job_type: Užduoties tipas
 name: Pavadinimas
 period: Periodas (s)

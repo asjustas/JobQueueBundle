@@ -11,6 +11,7 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 
+use Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfigurationName;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -58,15 +59,19 @@ class JobConfigurationType extends AbstractType
             'text',
             [
                 'label' => 'name',
-                'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 3, 'max' => 255])],
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(['min' => 3, 'max' => 255]),
+                    new UniqueJobConfigurationName()
+                ],
             ]
         );
 
         $builder->add(
-            'disabled',
+            'enabled',
             'checkbox',
             [
-                'label' => 'disabled',
+                'label' => 'enabled',
                 'required' => false,
             ]
         );

@@ -53,7 +53,7 @@ class JobPreConfigurationFormHandler
             if ($form->isValid()) {
                 $configuration = $form->getData();
 
-                $configuration->setDisabled(true);
+                $configuration->setEnabled(false);
                 $this->configurationManager->add($configuration);
 
                 return true;

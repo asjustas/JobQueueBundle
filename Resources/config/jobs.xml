@@ -19,22 +19,28 @@
 
         <service id="aureja_job_queue.job_factory.php" class="Aureja\JobQueue\Extension\Php\PhpJobFactory">
             <tag name="aureja_job_factory" alias="aureja_php_job_factory" />
+
+            <argument type="service" id="aureja_job_queue.manager.job_report" />
         </service>
 
         <service id="aureja_job_queue.job_factory.shell" class="Aureja\JobQueue\Extension\Shell\ShellJobFactory">
             <tag name="aureja_job_factory" alias="aureja_shell_job_factory" />
+
+            <argument type="service" id="aureja_job_queue.manager.job_report" />
         </service>
 
         <service id="aureja_job_queue.job_factory.symfony_command" class="Aureja\JobQueue\Extension\Symfony\Command\CommandJobFactory">
             <tag name="aureja_job_factory" alias="aureja_symfony_command_job_factory" />
 
             <argument type="service" id="aureja_job_queue.builder.symfony_command" />
+            <argument type="service" id="aureja_job_queue.manager.job_report" />
         </service>
 
         <service id="aureja_job_queue.job_factory.symfony_service" class="Aureja\JobQueue\Extension\Symfony\Service\ServiceJobFactory">
             <tag name="aureja_job_factory" alias="aureja_symfony_service_job_factory" />
 
             <argument type="service" id="service_container" />
+            <argument type="service" id="aureja_job_queue.manager.job_report" />
         </service>
 
     </services>

@@ -73,13 +73,21 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     /**
      * {@inheritdoc}
      */
+    public function findByName($name)
+    {
+        return $this->repository->findOneBy(['name' => $name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findNext($queue)
     {
         $qb = $this->repository->createQueryBuilder('jc');
 
         $qb->andWhere($qb->expr()->notIn('jc.state', ':states'))
             ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED]);
-        $qb->andWhere($qb->expr()->eq('jc.disabled', 0));
+        $qb->andWhere($qb->expr()->eq('jc.enabled', 1));
         $qb->andWhere(
             $qb->expr()->orX(
                 $qb->expr()->isNull('jc.nextStart'),

@@ -16,11 +16,13 @@
 
     <mapped-superclass name="Aureja\JobQueue\Model\JobReport">
 
-        <field name="endedAt" column="ended_at" type="datetime" nullable="false" />
+        <field name="endedAt" column="ended_at" type="datetime" nullable="true" />
 
         <field name="errorOutput" column="error_output" type="text" nullable="true" />
 
         <field name="output" column="output" type="text" nullable="true" />
+
+        <field name="pid" column="pid" type="bigint" nullable="true" />
 
         <field name="startedAt" column="started_at" type="datetime" nullable="false" />
 

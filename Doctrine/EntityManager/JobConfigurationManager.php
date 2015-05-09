@@ -89,13 +89,41 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     /**
      * {@inheritdoc}
      */
+    public function findPotentialDeadJobs($queue)
+    {
+        $qb = $this->repository->createQueryBuilder('jc');
+
+        $qb->andWhere($qb->expr()->in('jc.state', ':states'))
+            ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED]);
+        $qb->andWhere($qb->expr()->eq('jc.enabled', $qb->expr()->literal(1)));
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('jc.nextStart'),
+                $qb->expr()->lte('jc.nextStart', ':now')
+            )
+        )->setParameter('now', new \DateTime(), Type::DATETIME);
+
+        if (null !== $queue) {
+            $qb->andWhere($qb->expr()->eq('jc.queue', ':queue'))
+                ->setParameter('queue', $queue);
+        }
+
+        $qb->orderBy('jc.orderNr', 'ASC');
+        $qb->select('jc');
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findNext($queue)
     {
         $qb = $this->repository->createQueryBuilder('jc');
 
         $qb->andWhere($qb->expr()->notIn('jc.state', ':states'))
             ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED]);
-        $qb->andWhere($qb->expr()->eq('jc.enabled', 1));
+        $qb->andWhere($qb->expr()->eq('jc.enabled', $qb->expr()->literal(1)));
         $qb->andWhere(
             $qb->expr()->orX(
                 $qb->expr()->isNull('jc.nextStart'),

@@ -23,6 +23,8 @@
 
         <service id="aureja_job_queue.command.reset" class="Aureja\JobQueue\Command\ResetCommand">
             <tag name="console.command" />
+
+            <argument type="service" id="aureja_job_queue" />
         </service>
 
         <service id="aureja_job_queue.command.run" class="Aureja\JobQueue\Command\RunCommand">

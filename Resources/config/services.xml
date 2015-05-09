@@ -29,14 +29,13 @@
         </service>
 
         <service id="aureja_job_queue.provider.job" class="Aureja\JobQueue\Provider\JobProvider">
-            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
             <argument type="service" id="aureja_job_queue.registry.job_factory" />
         </service>
 
         <service id="aureja_job_queue.registry.job_factory" class="Aureja\JobQueue\Register\JobFactoryRegistry" />
 
-        <service id="aureja_job_queue.validator.unique_job_configuration_name" class="Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfigurationNameValidator">
-            <tag name="validator.constraint_validator" alias="aureja_job_queue.unique_job_configuration_name"/>
+        <service id="aureja_job_queue.validator.unique_job_configuration" class="Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfigurationValidator">
+            <tag name="validator.constraint_validator" alias="aureja_job_queue.unique_job_configuration"/>
 
             <argument type="service" id="aureja_job_queue.manager.job_configuration" />
         </service>

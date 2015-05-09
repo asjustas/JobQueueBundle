@@ -30,7 +30,7 @@
 
         <field name="period" column="period" type="integer" nullable="true" />
 
-        <field name="priority" column="priority" type="integer" nullable="false" />
+        <field name="orderNr" column="order_nr" type="bigint" nullable="false" />
 
         <field name="queue" column="queue" type="string" length="255" nullable="false" />
 

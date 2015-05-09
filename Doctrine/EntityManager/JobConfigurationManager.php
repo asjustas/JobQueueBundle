@@ -81,6 +81,14 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     /**
      * {@inheritdoc}
      */
+    public function findByQueueAndState($queue, $state)
+    {
+        return $this->repository->findOneBy(['queue' => $queue, 'state' => $state]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findNext($queue)
     {
         $qb = $this->repository->createQueryBuilder('jc');

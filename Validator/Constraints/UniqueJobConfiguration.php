@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraint;
  *
  * @since 4/30/15 10:26 PM
  */
-class UniqueJobConfigurationName extends Constraint
+class UniqueJobConfiguration extends Constraint
 {
     public $message = 'aureja_job_queue.configurion_name_is_not_unique';
 
@@ -27,6 +27,6 @@ class UniqueJobConfigurationName extends Constraint
      */
     public function validatedBy()
     {
-        return 'aureja_job_queue.unique_job_configuration_name';
+        return 'aureja_job_queue.unique_job_configuration';
     }
 }

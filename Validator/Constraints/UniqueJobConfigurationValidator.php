@@ -20,7 +20,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  *
  * @since 4/30/15 10:28 PM
  */
-class UniqueJobConfigurationNameValidator extends ConstraintValidator
+class UniqueJobConfigurationValidator extends ConstraintValidator
 {
 
     /**
@@ -41,10 +41,11 @@ class UniqueJobConfigurationNameValidator extends ConstraintValidator
     /**
      * {@inheritdoc}
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($configuration, Constraint $constraint)
     {
-        if (null !== $this->configurationManager->findByName($value)) {
-            $this->context->addViolation($constraint->message, array('%name%' => $value));
+        $result = $this->configurationManager->findByName($configuration->getName());
+        if ((null !== $result) && ($configuration !== $result)) {
+            $this->context->addViolation($constraint->message, array('%name%' => $configuration->getName()));
         }
     }
 }

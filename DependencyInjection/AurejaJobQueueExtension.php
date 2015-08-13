@@ -40,14 +40,12 @@ class AurejaJobQueueExtension extends Extension
         }
         $loader->load('db_driver/' . sprintf('%s.xml', $config['db_driver']));
 
-        $container->setParameter(
-            'aureja_job_queue.model.job_configuration.class',
-            $config['class']['model']['job_configuration']
-        );
-        $container->setParameter('aureja_job_queue.model.job_report.class', $config['class']['model']['job_report']);
-        $container->setParameter('aureja_job_queue.queues', $config['queues']);
+        $container->setAlias($this->getAlias() . '.manager.job_configuration', $config['job_configuration_manager']);
+        $container->setAlias($this->getAlias() . '.manager.job_report', $config['job_report_manager']);
 
-        $container->setAlias('aureja_job_queue.manager.job_configuration', $config['job_configuration_manager']);
-        $container->setAlias('aureja_job_queue.manager.job_report', $config['job_report_manager']);
+        $container->setParameter($this->getAlias() . '.model.job_configuration.class', $config['class']['model']['job_configuration']);
+        $container->setParameter($this->getAlias() . '.model.job_report.class', $config['class']['model']['job_report']);
+        $container->setParameter($this->getAlias() . '.queues', $config['queues']);
+        $container->setParameter($this->getAlias() . '.reset.timeout', $config['reset']['timeout']);
     }
 }

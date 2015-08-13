@@ -53,6 +53,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->requiresAtLeastOneElement()->prototype('scalar')->end()
                 ->end()
+
+                ->arrayNode('reset')->addDefaultsIfNotSet()
+                    ->children()
+                        ->integerNode('timeout')->min(60)->defaultValue(600)
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

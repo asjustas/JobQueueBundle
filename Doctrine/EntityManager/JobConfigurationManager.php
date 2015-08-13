@@ -89,27 +89,26 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     /**
      * {@inheritdoc}
      */
-    public function findPotentialDeadJobs($queue)
+    public function findPotentialDeadJobs(\DateTime $nextStart, $queue)
     {
         $qb = $this->repository->createQueryBuilder('jc');
 
-        $qb->andWhere($qb->expr()->in('jc.state', ':states'))
-            ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED]);
-        $qb->andWhere($qb->expr()->eq('jc.enabled', $qb->expr()->literal(1)));
-        $qb->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->isNull('jc.nextStart'),
-                $qb->expr()->lte('jc.nextStart', ':now')
+        $qb
+            ->andWhere($qb->expr()->in('jc.state', ':states'))
+            ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED])
+            ->andWhere($qb->expr()->eq('jc.enabled', $qb->expr()->literal(1)))
+            ->andWhere(
+                $qb->expr()->orX($qb->expr()->isNull('jc.nextStart'), $qb->expr()->lte('jc.nextStart', ':nextStart'))
             )
-        )->setParameter('now', new \DateTime(), Type::DATETIME);
+            ->setParameter('nextStart', $nextStart, Type::DATETIME)
+            ->orderBy('jc.orderNr', 'ASC')
+            ->select('jc');
 
         if (null !== $queue) {
-            $qb->andWhere($qb->expr()->eq('jc.queue', ':queue'))
+            $qb
+                ->andWhere($qb->expr()->eq('jc.queue', ':queue'))
                 ->setParameter('queue', $queue);
         }
-
-        $qb->orderBy('jc.orderNr', 'ASC');
-        $qb->select('jc');
 
         return $qb->getQuery()->getResult();
     }
@@ -117,29 +116,21 @@ class JobConfigurationManager extends BaseJobConfigurationManager
     /**
      * {@inheritdoc}
      */
-    public function findNext($queue)
+    public function findNextByQueue($queue)
     {
         $qb = $this->repository->createQueryBuilder('jc');
 
-        $qb->andWhere($qb->expr()->notIn('jc.state', ':states'))
-            ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED]);
-        $qb->andWhere($qb->expr()->eq('jc.enabled', $qb->expr()->literal(1)));
-        $qb->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->isNull('jc.nextStart'),
-                $qb->expr()->lte('jc.nextStart', ':now')
-            )
-        )->setParameter('now', new \DateTime(), Type::DATETIME);
-
-        if (null !== $queue) {
-            $qb->andWhere($qb->expr()->eq('jc.queue', ':queue'))
-                ->setParameter('queue', $queue);
-        }
-
-        $qb->orderBy('jc.nextStart');
-        $qb->setMaxResults(1);
-
-        $qb->select('jc');
+        $qb
+            ->andWhere($qb->expr()->notIn('jc.state', ':states'))
+            ->setParameter('states', [JobState::STATE_RUNNING, JobState::STATE_FAILED])
+            ->andWhere($qb->expr()->eq('jc.enabled', $qb->expr()->literal(1)))
+            ->andWhere($qb->expr()->orX($qb->expr()->isNull('jc.nextStart'), $qb->expr()->lte('jc.nextStart', ':now')))
+            ->setParameter('now', new \DateTime(), Type::DATETIME)
+            ->orderBy('jc.nextStart')
+            ->andWhere($qb->expr()->eq('jc.queue', ':queue'))
+            ->setParameter('queue', $queue)
+            ->setMaxResults(1)
+            ->select('jc');
 
         return $qb->getQuery()->getOneOrNullResult();
     }

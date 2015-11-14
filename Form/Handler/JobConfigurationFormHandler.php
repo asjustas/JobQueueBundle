@@ -11,6 +11,7 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Form\Handler;
 
+use Aureja\JobQueue\Model\JobConfigurationInterface;
 use Aureja\JobQueue\Model\Manager\JobConfigurationManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,37 +25,44 @@ class JobConfigurationFormHandler
 {
 
     /**
+     * @var FormInterface
+     */
+    private $form;
+
+    /**
      * @var JobConfigurationManagerInterface
      */
-    private $configurationManager;
+    private $manager;
 
     /**
      * Constructor.
      *
-     * @param JobConfigurationManagerInterface $configurationManager
+     * @param FormInterface $form
+     * @param JobConfigurationManagerInterface $manager
      */
-    public function __construct(JobConfigurationManagerInterface $configurationManager)
+    public function __construct(FormInterface $form, JobConfigurationManagerInterface $manager)
     {
-        $this->configurationManager = $configurationManager;
+        $this->form = $form;
+        $this->manager = $manager;
     }
 
     /**
      * Process job configuration form.
      *
-     * @param FormInterface $form
+     * @param JobConfigurationInterface $configuration
      * @param Request $request
      *
      * @return bool
      */
-    public function process(FormInterface $form, Request $request)
+    public function process(JobConfigurationInterface $configuration, Request $request)
     {
-        if ($request->isMethod('POST')) {
-            $form->submit($request);
-            if ($form->isValid()) {
-                $this->configurationManager->add($form->getData());
+        $this->form->setData($configuration);
+        $this->form->handleRequest($request);
 
-                return true;
-            }
+        if ($this->form->isValid()) {
+            $this->manager->add($configuration);
+
+            return true;
         }
 
         return false;
@@ -65,6 +73,6 @@ class JobConfigurationFormHandler
      */
     public function onSuccess()
     {
-        $this->configurationManager->save();
+        $this->manager->save();
     }
 }

@@ -10,3 +10,33 @@ period: Periodas (s)
 queue: Eilė
 save: Išsaugoti
 select: Pasirinkite
+
+add_job: Pridėti užduotį
+automatic_jobs: Automatinės užduotys
+button:
+  close: Uždaryti
+  yes: Taip
+close: Uždaryti
+delete_job: Pašalinti užduotį
+ended_at: Baigta
+edit_job: Redaguoti užduotį
+yes: Taip
+next_start: Sekantis paleidimas
+no: ne
+output_empty: Išvestis tuščia
+parameters: Parametrai
+preview_job: Užduoties %job_name% peržiūra
+process_identifier: Proceso indentifikatorius
+reports: Ataskaitos
+reset_job: Atstatyti užduotį
+show_more: Rodyti daugiau
+started_at: Pradėta
+state: Būsena
+
+an_error_occurred: Įvyko klaida
+question:
+  delete_configuration: Ar tikrai norite pašalinti "%name%" užduotį?
+  restore_configuration: Ar tikrai norite atstatyti "%name%" užduotį?
+success:
+  delete_configuration: Sėkmingai pašalinta užduotis!
+  restore_configuration: Sėkmingai atstatyta užduotis!

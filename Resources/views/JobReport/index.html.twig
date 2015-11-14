@@ -1,0 +1,65 @@
+{% extends 'AurejaJobQueueBundle::layout.html.twig' %}
+
+{% trans_default_domain 'AurejaJobQueue' %}
+
+{% set page_header = 'preview_job'|trans({'%job_name%': configuration.name}) %}
+
+{% block content %}
+    <div class="row well">
+        <div class="row">
+            <div class="col-md-3">
+                <strong>{{ 'job_type'|trans }}:</strong>
+                <span>{{ configuration.factory|trans }}</span>
+            </div>
+            <div class="col-md-3">
+                <strong>{{ 'enabled'|trans }}:</strong>
+                <span>{{ (configuration.enabled ? 'yes' : 'no')|trans }}</span>
+            </div>
+            <div class="col-md-3">
+                <strong>{{ 'period'|trans }}:</strong>
+                <span>{{ configuration.period }}</span>
+            </div>
+            <div class="col-md-3">
+                <strong>{{ 'next_start'|trans }}:</strong>
+                <span>{{ configuration.nextStart|date('Y-m-d H:i:s') }}</span>
+            </div>
+        </div>
+        <div class="row mt10">
+            <div class="col-md-3">
+                <strong>{{ 'queue'|trans }}:</strong>
+                <span>{{ configuration.queue }}</span>
+            </div>
+            <div class="col-md-3">
+                <strong>{{ 'state'|trans }}:</strong>
+                <span>{{ configuration.state }}</span>
+            </div>
+            <div class="col-md-6">
+                <strong>{{ 'parameters'|trans }}:</strong>
+                <span>{{ configuration.parameters|json_encode }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row job-reports" data-close="{{ 'close'|trans }}" data-show_more="{{ 'show_more'|trans }}">
+        <h2>{{ 'reports'|trans }}</h2>
+
+        {% for report in reports %}
+            <div class="alert {% if report.endedAt is empty %} alert-warning{% elseif report.successful %} alert-success{% else %} alert-danger{% endif %}" role="alert">
+                <p><strong>{{ 'started_at'|trans }}:</strong> {{ report.startedAt|date('Y-m-d H:i:s') }}</p>
+                {% if report.endedAt is not empty %}
+                <p><strong>{{ 'ended_at'|trans }}:</strong> {{ report.endedAt|date('Y-m-d H:i:s') }}</p>
+                {% endif %}
+                <p><strong>{{ 'process_identifier'|trans }}:</strong> {{ report.pid }}</p>
+                <p class="output">
+                    {% if report.successful %}
+                        {{ report.output ?: 'output_empty'|trans }}
+                    {% else %}
+                        {{ report.errorOutput ?: 'output_empty'|trans }}
+                    {% endif %}
+                </p>
+            </div>
+        {% endfor %}
+
+        {{ silvestra_paginator_render(pagination) }}
+    </div>
+{% endblock content %}

@@ -11,10 +11,11 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 
+use Aureja\Bundle\JobQueueBundle\Form\Subscriber\AddJobFactorySubscriber;
 use Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfiguration;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,6 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class JobConfigurationType extends AbstractType
 {
+
+    /**
+     * @var AddJobFactorySubscriber
+     */
+    private $subscriber;
 
     /**
      * @var string
@@ -39,15 +45,16 @@ class JobConfigurationType extends AbstractType
     /**
      * Constructor.
      *
+     * @param AddJobFactorySubscriber $subscriber
      * @param string $configurationClass
      * @param array $queues
      */
-    public function __construct($configurationClass, array $queues)
+    public function __construct(AddJobFactorySubscriber $subscriber, $configurationClass, array $queues)
     {
+        $this->subscriber = $subscriber;
         $this->configurationClass = $configurationClass;
         $this->queues = $queues;
     }
-
 
     /**
      * {@inheritdoc}
@@ -89,13 +96,13 @@ class JobConfigurationType extends AbstractType
             'choice',
             [
                 'label' => 'queue',
-                'choices' => array_combine($this->queues, $this->queues),
+                'choices' => $this->getQueueChoices(),
                 'empty_value' => 'select',
                 'constraints' => new Assert\NotBlank(),
             ]
         );
 
-        $builder->add('parameters', $options['job_factory']);
+        $builder->addEventSubscriber($this->subscriber);
 
         $builder->add(
             'submit',
@@ -109,10 +116,8 @@ class JobConfigurationType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setOptional(['job_factory']);
-
         $resolver->setDefaults(
             [
                 'constraints' => new UniqueJobConfiguration(),
@@ -128,5 +133,13 @@ class JobConfigurationType extends AbstractType
     public function getName()
     {
         return 'aureja_job_configuration';
+    }
+
+    /**
+     * @return array
+     */
+    private function getQueueChoices()
+    {
+        return array_combine($this->queues, $this->queues);
     }
 }

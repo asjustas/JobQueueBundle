@@ -11,6 +11,7 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Doctrine\EntityManager;
 
+use Aureja\JobQueue\Model\JobConfigurationInterface;
 use Aureja\JobQueue\Model\Manager\JobReportManager as BaseJobReportManager;
 use Aureja\JobQueue\Model\JobReportInterface;
 use Doctrine\ORM\EntityManager;
@@ -50,6 +51,39 @@ class JobReportManager extends BaseJobReportManager
         $this->em = $em;
         $this->repository = $em->getRepository($class);
         $this->class = $em->getClassMetadata($class)->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCountByConfiguration(JobConfigurationInterface $configuration)
+    {
+        $qb = $this->repository->createQueryBuilder('jr');
+
+        $qb
+            ->select('COUNT(jr.id)')
+            ->where($qb->expr()->eq('jr.configuration', ':configuration'))
+            ->setParameter('configuration', $configuration);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getJobReportsByConfiguration(JobConfigurationInterface $configuration, $offset, $limit)
+    {
+        $qb = $this->repository->createQueryBuilder('jr');
+
+        $qb
+            ->select('jr')
+            ->where($qb->expr()->eq('jr.configuration', ':configuration'))
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->orderBy($qb->expr()->desc('jr.startedAt'))
+            ->setParameter('configuration', $configuration);
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

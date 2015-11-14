@@ -12,10 +12,13 @@
         "php": ">=5.4",
 
         "aureja/job-queue": "0.1.*@dev",
-        "symfony/framework-bundle" : ">=2.3"
+        "symfony/framework-bundle" : ">=2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.2"
+    },
+    "suggest": {
+        "silvestra/paginator-bundle": "For using the job reports pagination."
     },
     "autoload": {
         "psr-4": {

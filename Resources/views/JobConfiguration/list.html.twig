@@ -1,0 +1,92 @@
+{% extends 'AurejaJobQueueBundle::layout.html.twig' %}
+
+{% trans_default_domain 'AurejaJobQueue' %}
+
+{% set page_header = 'automatic_jobs'|trans %}
+
+{% block content %}
+    <div class="row mb10">
+        <a class="btn btn-primary" href="{{ path('aureja_job_queue_configuration_add') }}">{{ 'add_job'|trans }}</a>
+    </div>
+    {% for configuration in configurations %}
+        {% if not configuration.enabled %}
+            {% set panel_color = 'default' %}
+        {% elseif configuration.state == 'running' %}
+            {% set panel_color = 'yellow' %}
+        {% elseif configuration.state == 'finished' %}
+            {% set panel_color = 'green' %}
+        {% elseif configuration.state == 'failed' %}
+            {% set panel_color = 'red' %}
+        {% elseif configuration.state == 'restored' %}
+            {% set panel_color = 'warning' %}
+        {% else %}
+            {% set panel_color = 'info' %}
+        {% endif %}
+
+        <div class="row">
+            <div class="panel panel-{{ panel_color }}">
+                <div class="panel-heading">
+                    <a class="panel-title" href="{{ path('aureja_job_queue_report_index', {configurationId: configuration.id}) }}">
+                        <strong>[{{ configuration.queue }}] {{ configuration.name }}</strong>
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>{{ 'job_type'|trans({}, 'AurejaJobQueue') }}:</strong>
+                            <span>{{ configuration.factory|trans({}, 'AurejaJobQueue') }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>{{ 'enabled'|trans({}, 'AurejaJobQueue') }}:</strong>
+                            <span>{{ (configuration.enabled ? 'yes' : 'no')|trans }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>{{ 'period'|trans({}, 'AurejaJobQueue') }}:</strong>
+                            <span>{{ configuration.period }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>{{ 'next_start'|trans }}:</strong>
+                            <span>{% if configuration.nextStart is not empty %}{{ configuration.nextStart|date('Y-m-d H:i:s') }}{% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>{{ 'queue'|trans({}, 'AurejaJobQueue') }}:</strong>
+                            <span>{{ configuration.queue }}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>{{ 'state'|trans }}:</strong>
+                            <span>{{ configuration.state }}</span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>{{ 'parameters'|trans }}:</strong>
+                            <span>{{ configuration.parameters|json_encode }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <a class="mr10" href="{{ path('aureja_job_queue_configuration_edit', {configurationId: configuration.id}) }}">
+                        {{ 'edit_job'|trans }}
+                    </a>
+                    <a href="{{ path('aureja_job_queue_restore_reset', {configurationId: configuration.id}) }}"
+                       class="mr10 backend-post-dialog"
+                       data-close-button="{{ 'button.close'|trans }}"
+                       data-confirm-button="{{ 'button.yes'|trans }}"
+                       data-title="{{ 'question.restore_configuration'|trans({'%name%': configuration.name}) }}"
+                       data-error-title="{{ 'an_error_occurred'|trans }}">
+                        {{ 'reset_job'|trans }}
+                    </a>
+
+                    <a href="{{ path('aureja_job_queue_configuration_delete', {configurationId: configuration.id}) }}"
+                       class="backend-delete-dialog"
+                       data-close-button="{{ 'button.close'|trans }}"
+                       data-confirm-button="{{ 'button.yes'|trans }}"
+                       data-title="{{ 'question.delete_configuration'|trans({'%name%': configuration.name}) }}"
+                       data-error-title="{{ 'an_error_occurred'|trans }}">
+                        {{ 'delete_job'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}

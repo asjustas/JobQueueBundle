@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+
+<!--
+/*
+ * This file is part of the Aureja package.
+ *
+ * (c) Tadas Gliaubicas <tadcka89@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+-->
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="aureja_job_queue.delete_handler.configuration" class="Aureja\Bundle\JobQueueBundle\Handler\JobConfigurationDeleteHandler">
+            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="aureja_job_queue.restore_handler.job" class="Aureja\Bundle\JobQueueBundle\Handler\JobRestoreHandler">
+            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
+            <argument type="service" id="aureja_job_queue.manager.job_restore" />
+            <argument type="service" id="translator" />
+        </service>
+
+    </services>
+
+</container>

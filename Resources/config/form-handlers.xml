@@ -17,23 +17,16 @@
 
     <services>
 
-        <!--Job pre configuration form factory-->
-        <service id="aureja_job_queue.form_factory.job_pre_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Factory\JobPreConfigurationFormFactory">
-            <argument type="service" id="form.factory" />
+        <!--Job configuration form handler-->
+        <service id="aureja_job_queue.form_handler.job_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Handler\JobConfigurationFormHandler">
+            <argument type="service" id="aureja_job_queue.form.job_configuration" />
+            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
         </service>
 
         <!--Job pre configuration form handler-->
         <service id="aureja_job_queue.form_handler.job_pre_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Handler\JobPreConfigurationFormHandler">
+            <argument type="service" id="aureja_job_queue.form.job_pre_configuration" />
             <argument type="service" id="aureja_job_queue.manager.job_configuration" />
-        </service>
-
-        <!--Job pre configuration form type-->
-        <service id="aureja_job_queue.form_type.job_pre_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Type\JobPreConfigurationType">
-            <tag name="form.type" alias="aureja_job_pre_configuration" />
-
-            <argument>%aureja_job_queue.model.job_configuration.class%</argument>
-            <argument type="service" id="aureja_job_queue.provider.job" />
-            <argument>%aureja_job_queue.queues%</argument>
         </service>
 
     </services>

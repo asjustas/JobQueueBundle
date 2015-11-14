@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="aureja_job_queue_configuration_add" path="/add">
+        <default key="_controller">aureja_job_queue.controller.job_configuration:addAction</default>
+    </route>
+
+    <route id="aureja_job_queue_configuration_delete" path="/delete/{configurationId}">
+        <default key="_controller">aureja_job_queue.controller.job_configuration:deleteAction</default>
+    </route>
+
+    <route id="aureja_job_queue_configuration_edit" path="/edit/{configurationId}">
+        <default key="_controller">aureja_job_queue.controller.job_configuration:editAction</default>
+    </route>
+
+    <route id="aureja_job_queue_configurations" path="/list">
+        <default key="_controller">aureja_job_queue.controller.job_configuration:listAction</default>
+    </route>
+
+</routes>

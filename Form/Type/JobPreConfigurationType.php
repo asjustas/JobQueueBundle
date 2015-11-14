@@ -15,7 +15,7 @@ use Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfiguration;
 use Aureja\JobQueue\Provider\JobProviderInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -55,7 +55,6 @@ class JobPreConfigurationType extends AbstractType
         $this->queues = $queues;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -73,15 +72,12 @@ class JobPreConfigurationType extends AbstractType
             ]
         );
 
-
-        $factoryNames = $this->jobProvider->getFactoryNames();
-
         $builder->add(
             'factory',
             'choice',
             [
                 'label' => 'job_type',
-                'choices' => array_combine($factoryNames, $factoryNames),
+                'choices' => $this->getFactoryNameChoices(),
                 'empty_value' => 'select',
                 'constraints' => new Assert\NotBlank(),
             ]
@@ -92,7 +88,7 @@ class JobPreConfigurationType extends AbstractType
             'choice',
             [
                 'label' => 'queue',
-                'choices' => array_combine($this->queues, $this->queues),
+                'choices' => $this->getQueueChoices(),
                 'empty_value' => 'select',
                 'constraints' => new Assert\NotBlank(),
             ]
@@ -110,7 +106,7 @@ class JobPreConfigurationType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [
@@ -127,5 +123,23 @@ class JobPreConfigurationType extends AbstractType
     public function getName()
     {
         return 'aureja_job_pre_configuration';
+    }
+
+    /**
+     * @return array
+     */
+    private function getFactoryNameChoices()
+    {
+        $names = $this->jobProvider->getFactoryNames();
+
+        return array_combine($names, $names);
+    }
+
+    /**
+     * @return array
+     */
+    private function getQueueChoices()
+    {
+        return array_combine($this->queues, $this->queues);
     }
 }

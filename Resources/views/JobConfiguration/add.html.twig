@@ -1,0 +1,15 @@
+{% extends 'AurejaJobQueueBundle::layout.html.twig' %}
+
+{% trans_default_domain 'AurejaJobQueue' %}
+
+{% set page_header = 'add_job'|trans %}
+
+{% block content %}
+    <div class="row">
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_rest(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock content %}

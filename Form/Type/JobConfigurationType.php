@@ -11,7 +11,7 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 
-use Aureja\Bundle\JobQueueBundle\Form\Subscriber\AddJobFactorySubscriber;
+use Aureja\Bundle\JobQueueBundle\Form\Subscriber\AddJobParametersSubscriber;
 use Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfiguration;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,15 +27,9 @@ class JobConfigurationType extends AbstractType
 {
 
     /**
-     * @var AddJobFactorySubscriber
+     * @var AddJobParametersSubscriber
      */
     private $subscriber;
-
-    /**
-     * @var string
-     */
-    private $configurationClass;
-
 
     /**
      * @var array
@@ -43,17 +37,22 @@ class JobConfigurationType extends AbstractType
     private $queues;
 
     /**
+     * @var string
+     */
+    private $configurationClass;
+
+    /**
      * Constructor.
      *
-     * @param AddJobFactorySubscriber $subscriber
-     * @param string $configurationClass
+     * @param AddJobParametersSubscriber $subscriber
      * @param array $queues
+     * @param string $configurationClass
      */
-    public function __construct(AddJobFactorySubscriber $subscriber, $configurationClass, array $queues)
+    public function __construct(AddJobParametersSubscriber $subscriber, array $queues, $configurationClass)
     {
         $this->subscriber = $subscriber;
-        $this->configurationClass = $configurationClass;
         $this->queues = $queues;
+        $this->configurationClass = $configurationClass;
     }
 
     /**

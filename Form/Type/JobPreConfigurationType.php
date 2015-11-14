@@ -27,11 +27,6 @@ class JobPreConfigurationType extends AbstractType
 {
 
     /**
-     * @var string
-     */
-    private $configurationClass;
-
-    /**
      * @var JobProviderInterface
      */
     private $jobProvider;
@@ -42,17 +37,22 @@ class JobPreConfigurationType extends AbstractType
     private $queues;
 
     /**
+     * @var string
+     */
+    private $configurationClass;
+
+    /**
      * Constructor.
      *
-     * @param string $configurationClass
      * @param JobProviderInterface $jobProvider
      * @param array $queues
+     * @param string $configurationClass
      */
-    public function __construct($configurationClass, JobProviderInterface $jobProvider, array $queues)
+    public function __construct(JobProviderInterface $jobProvider, array $queues, $configurationClass)
     {
-        $this->configurationClass = $configurationClass;
         $this->jobProvider = $jobProvider;
         $this->queues = $queues;
+        $this->configurationClass = $configurationClass;
     }
 
     /**

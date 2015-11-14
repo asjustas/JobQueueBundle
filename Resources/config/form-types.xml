@@ -21,18 +21,18 @@
         <service id="aureja_job_queue.form_type.job_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Type\JobConfigurationType">
             <tag name="form.type" alias="aureja_job_configuration" />
 
-            <argument type="service" id="aureja_job_queue.form_subscriber.add_job_factory" />
-            <argument>%aureja_job_queue.model.job_configuration.class%</argument>
+            <argument type="service" id="aureja_job_queue.form_subscriber.add_job_parameters" />
             <argument>%aureja_job_queue.queues%</argument>
+            <argument>%aureja_job_queue.model.job_configuration.class%</argument>
         </service>
 
         <!--Job pre configuration form type-->
         <service id="aureja_job_queue.form_type.job_pre_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Type\JobPreConfigurationType">
             <tag name="form.type" alias="aureja_job_pre_configuration" />
 
-            <argument>%aureja_job_queue.model.job_configuration.class%</argument>
             <argument type="service" id="aureja_job_queue.provider.job" />
             <argument>%aureja_job_queue.queues%</argument>
+            <argument>%aureja_job_queue.model.job_configuration.class%</argument>
         </service>
 
         <!--Php job factory form type-->

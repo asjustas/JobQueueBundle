@@ -22,7 +22,7 @@ use Symfony\Component\Form\FormFactoryInterface;
  *
  * @since 11/14/15 6:14 PM
  */
-class AddJobFactorySubscriber implements EventSubscriberInterface
+class AddJobParametersSubscriber implements EventSubscriberInterface
 {
 
     /**
@@ -45,7 +45,7 @@ class AddJobFactorySubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return [FormEvents::PRE_SET_DATA => 'addJobFactoryField'];
+        return [FormEvents::PRE_SET_DATA => 'addJobParametersField'];
     }
 
     /**
@@ -53,7 +53,7 @@ class AddJobFactorySubscriber implements EventSubscriberInterface
      *
      * @param FormEvent $event
      */
-    public function addJobFactoryField(FormEvent $event)
+    public function addJobParametersField(FormEvent $event)
     {
         $data = $event->getData();
 

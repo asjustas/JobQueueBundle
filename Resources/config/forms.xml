@@ -24,13 +24,6 @@
             <argument>aureja_job_configuration</argument>
         </service>
 
-        <service id="aureja_job_queue.form.job_pre_configuration" class="Symfony\Component\Form\Form">
-            <factory service="form.factory" method="createNamed"/>
-
-            <argument>aureja_job_pre_configuration_form</argument>
-            <argument>aureja_job_pre_configuration</argument>
-        </service>
-
     </services>
 
 </container>

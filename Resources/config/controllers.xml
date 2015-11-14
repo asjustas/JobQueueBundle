@@ -18,12 +18,10 @@
     <services>
 
         <service id="aureja_job_queue.controller.job_configuration" class="Aureja\Bundle\JobQueueBundle\Controller\JobConfigurationController">
+            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
             <argument type="service" id="aureja_job_queue.delete_handler.configuration" />
             <argument type="service" id="aureja_job_queue.form.job_configuration" />
             <argument type="service" id="aureja_job_queue.form_handler.job_configuration" />
-            <argument type="service" id="aureja_job_queue.form.job_pre_configuration" />
-            <argument type="service" id="aureja_job_queue.form_handler.job_pre_configuration" />
-            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
             <argument type="service" id="router" />
             <argument type="service" id="templating" />
         </service>

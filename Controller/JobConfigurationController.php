@@ -12,7 +12,6 @@
 namespace Aureja\Bundle\JobQueueBundle\Controller;
 
 use Aureja\Bundle\JobQueueBundle\Form\Handler\JobConfigurationFormHandler;
-use Aureja\Bundle\JobQueueBundle\Form\Handler\JobPreConfigurationFormHandler;
 use Aureja\Bundle\JobQueueBundle\Handler\JobConfigurationDeleteHandler;
 use Aureja\Bundle\JobQueueBundle\Traits\ControllerTrait;
 use Aureja\JobQueue\Model\Manager\JobConfigurationManagerInterface;
@@ -34,6 +33,11 @@ class JobConfigurationController
     use ControllerTrait;
 
     /**
+     * @var JobConfigurationManagerInterface
+     */
+    private $configurationManager;
+
+    /**
      * @var JobConfigurationDeleteHandler
      */
     private $deleteHandler;
@@ -41,27 +45,12 @@ class JobConfigurationController
     /**
      * @var FormInterface
      */
-    private $configurationForm;
+    private $form;
 
     /**
      * @var JobConfigurationFormHandler
      */
-    private $configurationFormHandler;
-
-    /**
-     * @var FormInterface
-     */
-    private $preConfigurationForm;
-
-    /**
-     * @var JobPreConfigurationFormHandler
-     */
-    private $preConfigurationFormHandler;
-
-    /**
-     * @var JobConfigurationManagerInterface
-     */
-    private $configurationManager;
+    private $formHandler;
 
     /**
      * @var RouterInterface
@@ -76,41 +65,45 @@ class JobConfigurationController
     /**
      * Constructor.
      *
-     * @param JobConfigurationDeleteHandler $deleteHandler
-     * @param FormInterface $configurationForm
-     * @param JobConfigurationFormHandler $configurationFormHandler
-     * @param FormInterface $preConfigurationForm
-     * @param JobPreConfigurationFormHandler $preConfigurationFormHandler
      * @param JobConfigurationManagerInterface $configurationManager
+     * @param JobConfigurationDeleteHandler $deleteHandler
+     * @param FormInterface $form
+     * @param JobConfigurationFormHandler $formHandler
      * @param RouterInterface $router
      * @param EngineInterface $templating
      */
     public function __construct(
-        JobConfigurationDeleteHandler $deleteHandler,
-        FormInterface $configurationForm,
-        JobConfigurationFormHandler $configurationFormHandler,
-        FormInterface $preConfigurationForm,
-        JobPreConfigurationFormHandler $preConfigurationFormHandler,
         JobConfigurationManagerInterface $configurationManager,
+        JobConfigurationDeleteHandler $deleteHandler,
+        FormInterface $form,
+        JobConfigurationFormHandler $formHandler,
         RouterInterface $router,
         EngineInterface $templating
     ) {
-        $this->deleteHandler = $deleteHandler;
-        $this->configurationForm = $configurationForm;
-        $this->configurationFormHandler = $configurationFormHandler;
-        $this->preConfigurationForm = $preConfigurationForm;
-        $this->preConfigurationFormHandler = $preConfigurationFormHandler;
         $this->configurationManager = $configurationManager;
+        $this->deleteHandler = $deleteHandler;
+        $this->form = $form;
+        $this->formHandler = $formHandler;
         $this->router = $router;
         $this->templating = $templating;
+    }
+
+    public function listAction()
+    {
+        return $this->templating->renderResponse(
+            'AurejaJobQueueBundle:JobConfiguration:list.html.twig',
+            [
+                'configurations' => $this->configurationManager->findAll(),
+            ]
+        );
     }
 
     public function addAction(Request $request)
     {
         $configuration = $this->configurationManager->create();
 
-        if ($this->preConfigurationFormHandler->process($configuration, $request)) {
-            $this->preConfigurationFormHandler->onSuccess();
+        if ($this->formHandler->process($configuration, $request)) {
+            $this->formHandler->onSuccess();
 
             return new RedirectResponse(
                 $this->router->generate(
@@ -123,7 +116,25 @@ class JobConfigurationController
         return $this->templating->renderResponse(
             'AurejaJobQueueBundle:JobConfiguration:add.html.twig',
             [
-                'form' => $this->preConfigurationForm->createView(),
+                'form' => $this->form->createView(),
+            ]
+        );
+    }
+
+    public function editAction(Request $request, $configurationId)
+    {
+        $configuration = $this->getConfigurationOr404($configurationId);
+
+        if ($this->formHandler->process($configuration, $request)) {
+            $this->formHandler->onSuccess();
+
+            return new RedirectResponse($this->router->generate('aureja_job_queue_configurations'));
+        }
+
+        return $this->templating->renderResponse(
+            'AurejaJobQueueBundle:JobConfiguration:edit.html.twig',
+            [
+                'form' => $this->form->createView(),
             ]
         );
     }
@@ -137,33 +148,5 @@ class JobConfigurationController
         }
 
         return new JsonResponse($this->deleteHandler->onError());
-    }
-
-    public function editAction(Request $request, $configurationId)
-    {
-        $configuration = $this->getConfigurationOr404($configurationId);
-
-        if ($this->configurationFormHandler->process($configuration, $request)) {
-            $this->configurationFormHandler->onSuccess();
-
-            return new RedirectResponse($this->router->generate('aureja_job_queue_configurations'));
-        }
-
-        return $this->templating->renderResponse(
-            'AurejaJobQueueBundle:JobConfiguration:edit.html.twig',
-            [
-                'form' => $this->configurationForm->createView(),
-            ]
-        );
-    }
-
-    public function listAction()
-    {
-        return $this->templating->renderResponse(
-            'AurejaJobQueueBundle:JobConfiguration:list.html.twig',
-            [
-                'configurations' => $this->configurationManager->findAll(),
-            ]
-        );
     }
 }

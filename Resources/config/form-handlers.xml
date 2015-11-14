@@ -23,12 +23,6 @@
             <argument type="service" id="aureja_job_queue.manager.job_configuration" />
         </service>
 
-        <!--Job pre configuration form handler-->
-        <service id="aureja_job_queue.form_handler.job_pre_configuration" class="Aureja\Bundle\JobQueueBundle\Form\Handler\JobPreConfigurationFormHandler">
-            <argument type="service" id="aureja_job_queue.form.job_pre_configuration" />
-            <argument type="service" id="aureja_job_queue.manager.job_configuration" />
-        </service>
-
     </services>
 
 </container>

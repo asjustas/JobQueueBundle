@@ -26,30 +26,17 @@ class AddJobParametersSubscriber implements EventSubscriberInterface
 {
 
     /**
-     * @var FormFactoryInterface
-     */
-    private $factory;
-
-    /**
-     * Constructor.
-     *
-     * @param FormFactoryInterface $factory
-     */
-    public function __construct(FormFactoryInterface $factory)
-    {
-        $this->factory = $factory;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
     {
-        return [FormEvents::PRE_SET_DATA => 'addJobParametersField'];
+        return [
+            FormEvents::PRE_SET_DATA => 'addJobParametersField'
+        ];
     }
 
     /**
-     * Add job factory field.
+     * Add job parameters field.
      *
      * @param FormEvent $event
      */

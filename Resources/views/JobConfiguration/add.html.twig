@@ -9,6 +9,13 @@
         {{ form_start(form) }}
             {{ form_errors(form) }}
 
+            {{ form_row(form.name) }}
+            {{ form_row(form.enabled) }}
+            {{ form_row(form.period) }}
+            {{ form_row(form.factory) }}
+            {{ form_row(form.queue) }}
+            {{ form_row(form.submit) }}
+
             {{ form_rest(form) }}
         {{ form_end(form) }}
     </div>

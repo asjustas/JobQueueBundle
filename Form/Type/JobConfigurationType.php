@@ -11,6 +11,7 @@
 
 namespace Aureja\Bundle\JobQueueBundle\Form\Type;
 
+use Aureja\Bundle\JobQueueBundle\Form\Subscriber\AddJobFactorySubscriber;
 use Aureja\Bundle\JobQueueBundle\Form\Subscriber\AddJobParametersSubscriber;
 use Aureja\Bundle\JobQueueBundle\Validator\Constraints\UniqueJobConfiguration;
 use Symfony\Component\Form\AbstractType;
@@ -27,9 +28,14 @@ class JobConfigurationType extends AbstractType
 {
 
     /**
+     * @var AddJobFactorySubscriber
+     */
+    private $factorySubscriber;
+
+    /**
      * @var AddJobParametersSubscriber
      */
-    private $subscriber;
+    private $parametersSubscriber;
 
     /**
      * @var array
@@ -44,13 +50,19 @@ class JobConfigurationType extends AbstractType
     /**
      * Constructor.
      *
-     * @param AddJobParametersSubscriber $subscriber
+     * @param AddJobFactorySubscriber $factorySubscriber
+     * @param AddJobParametersSubscriber $parametersSubscriber
      * @param array $queues
      * @param string $configurationClass
      */
-    public function __construct(AddJobParametersSubscriber $subscriber, array $queues, $configurationClass)
-    {
-        $this->subscriber = $subscriber;
+    public function __construct(
+        AddJobFactorySubscriber $factorySubscriber,
+        AddJobParametersSubscriber $parametersSubscriber,
+        array $queues,
+        $configurationClass
+    ) {
+        $this->factorySubscriber = $factorySubscriber;
+        $this->parametersSubscriber = $parametersSubscriber;
         $this->queues = $queues;
         $this->configurationClass = $configurationClass;
     }
@@ -101,8 +113,6 @@ class JobConfigurationType extends AbstractType
             ]
         );
 
-        $builder->addEventSubscriber($this->subscriber);
-
         $builder->add(
             'submit',
             'submit',
@@ -110,6 +120,9 @@ class JobConfigurationType extends AbstractType
                 'label' => 'save'
             ]
         );
+
+        $builder->addEventSubscriber($this->factorySubscriber);
+        $builder->addEventSubscriber($this->parametersSubscriber);
     }
 
     /**

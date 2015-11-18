@@ -49,6 +49,15 @@ class JobReport extends BaseJobReport
     /**
      * {@inheritdoc}
      *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * {@inheritdoc}
+     *
      * @ORM\ManyToOne(targetEntity="Acme\YourBundle\Entity\JobConfiguration", inversedBy="reports")
      * @ORM\JoinColumn(name="configuration_id", nullable=false, onDelete="CASCADE")
      */
@@ -75,24 +84,20 @@ use Doctrine\ORM\Mapping as ORM;
 class JobConfiguration extends BaseJobConfiguration
 {
     /**
-     * @var int
+     * {@inheritdoc}
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-    
+    protected $id;
+
     /**
      * {@inheritdoc}
      *
      * @ORM\OneToMany(targetEntity="Acme\YourBundle\Entity\JobConfiguration", mappedBy="configuration")
      */
     protected $reports;
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
     
     // Your custom logic if needed.
 }
@@ -122,7 +127,7 @@ aureja_job_queue:
 ```
 # app/config/routing.yml
 
-tadcka_job_queue:
+aureja_job_queue:
     resource: "@AurejaJobQueueBundle/Resources/config/routing.xml"
 ```
 

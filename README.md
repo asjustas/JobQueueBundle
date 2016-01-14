@@ -95,7 +95,7 @@ class JobConfiguration extends BaseJobConfiguration
     /**
      * {@inheritdoc}
      *
-     * @ORM\OneToMany(targetEntity="Acme\YourBundle\Entity\JobConfiguration", mappedBy="configuration")
+     * @ORM\OneToMany(targetEntity="Acme\YourBundle\Entity\JobReport", mappedBy="configuration")
      */
     protected $reports;
     

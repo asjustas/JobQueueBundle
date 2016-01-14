@@ -1,0 +1,42 @@
+aureja_php_job_factory: Php
+aureja_shell_job_factory: Shell
+aureja_symfony_command_job_factory: Symfony command
+aureja_symfony_service_job_factory: Symfony service
+
+enabled: Enabled
+job_type: Job type
+name: Name
+period: Period (s)
+queue: Queue
+save: Save
+select: Select
+
+add_job: Add job
+automatic_jobs: Automatic jobs
+button:
+  close: Close
+  yes: Yes
+close: Close
+delete_job: Delete job
+ended_at: Ended at
+edit_job: Edit job
+yes: Yes
+next_start: Next run
+no: No
+output_empty: Empty output
+parameters: Parameters
+preview_job: Job %job_name%
+process_identifier: Process identifier
+reports: Reports
+reset_job: Reset job
+show_more: Show more
+started_at: Started at
+state: State
+
+an_error_occurred: An error occured!
+question:
+  delete_configuration: Do you really want to delete "%name%" job?
+  restore_configuration: Do you really want to restore "%name%" job?
+success:
+  delete_configuration: The job has been deleted!
+  restore_configuration: The job has been restored!

@@ -89,6 +89,23 @@ class JobReportManager extends BaseJobReportManager
     /**
      * {@inheritdoc}
      */
+    public function getLastStartedByConfiguration(JobConfigurationInterface $configuration)
+    {
+        $qb = $this->repository->createQueryBuilder('jr');
+
+        $qb
+            ->select('jr')
+            ->where($qb->expr()->eq('jr.configuration', ':configuration'))
+            ->setMaxResults(1)
+            ->orderBy($qb->expr()->desc('jr.startedAt'))
+            ->setParameter('configuration', $configuration);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(JobReportInterface $report, $save = false)
     {
         $this->em->persist($report);

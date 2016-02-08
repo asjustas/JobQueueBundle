@@ -58,7 +58,7 @@ class JobReport extends BaseJobReport
     /**
      * {@inheritdoc}
      *
-     * @ORM\ManyToOne(targetEntity="Acme\YourBundle\Entity\JobConfiguration", inversedBy="reports")
+     * @ORM\ManyToOne(targetEntity="Acme\YourBundle\Entity\JobConfiguration")
      * @ORM\JoinColumn(name="configuration_id", nullable=false, onDelete="CASCADE")
      */
     protected $configuration;
@@ -91,13 +91,6 @@ class JobConfiguration extends BaseJobConfiguration
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
-    /**
-     * {@inheritdoc}
-     *
-     * @ORM\OneToMany(targetEntity="Acme\YourBundle\Entity\JobReport", mappedBy="configuration")
-     */
-    protected $reports;
     
     // Your custom logic if needed.
 }

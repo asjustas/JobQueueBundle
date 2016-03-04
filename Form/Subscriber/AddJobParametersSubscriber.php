@@ -47,6 +47,9 @@ class AddJobParametersSubscriber implements EventSubscriberInterface
         if ($data instanceof JobConfigurationInterface && $data->getId()) {
             $form = $event->getForm();
 
+            // Todo: here we need to have full type (Aureja\Bundle\JobQueueBundle\Form\Type\SymfonyCommandJobFactoryType) not alias
+            // 'aureja_symfony_command_job_factory' => 'Aureja\Bundle\JobQueueBundle\Form\Type\SymfonyCommandJobFactoryType'
+
             $form->add('parameters', $data->getFactory());
         }
     }

@@ -51,12 +51,4 @@ class PhpJobFactoryType extends AbstractType
             ]
         );
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'aureja_php_job_factory';
-    }
 }

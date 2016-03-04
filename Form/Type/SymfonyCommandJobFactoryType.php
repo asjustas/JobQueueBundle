@@ -51,12 +51,4 @@ class SymfonyCommandJobFactoryType extends AbstractType
             ]
         );
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'aureja_symfony_command_job_factory';
-    }
 }

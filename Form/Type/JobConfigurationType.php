@@ -145,14 +145,6 @@ class JobConfigurationType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'aureja_job_configuration';
-    }
-
-    /**
      * @return array
      */
     private function getQueueChoices()

@@ -60,12 +60,4 @@ class SymfonyServiceJobFactoryType extends AbstractType
             ]
         );
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'aureja_symfony_service_job_factory';
-    }
 }

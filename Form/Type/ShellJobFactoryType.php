@@ -51,12 +51,4 @@ class ShellJobFactoryType extends AbstractType
             ]
         );
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'aureja_shell_job_factory';
-    }
 }
